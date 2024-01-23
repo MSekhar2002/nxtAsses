@@ -26,6 +26,7 @@ class Assessment extends Component {
     timer: 600,
     apiStatus: apiStatusConstants.initial,
     timeUp: true,
+    total: 0,
   }
 
   componentDidMount() {
@@ -37,7 +38,8 @@ class Assessment extends Component {
     this.setState({apiStatus: apiStatusConstants.inProgress})
     const response = await fetch('https://apis.ccbp.in/assess/questions')
     const data = await response.json()
-    // console.log(data);
+    console.log(data)
+    this.setState({total: data?.questions?.length})
     if (response.ok === true) {
       const updatedData = data.questions.map(eachQuestion => ({
         id: eachQuestion.id,
@@ -256,27 +258,27 @@ class Assessment extends Component {
   }
 
   renderAssessmentSummary = () => {
-    const {answeredQuestionsCount, assessmentQuestion} = this.state
-    const total = assessmentQuestion.length
+    const {total, answeredQuestionsCount, assessmentQuestion} = this.state
+
     return (
       <div className="assessment-summary">
         <div className="answered-unanswered-card">
-          <p className="answered">
-            <span className="answered-span">{answeredQuestionsCount}</span>{' '}
-            Answered Questions
-          </p>
+          <div className="answered">
+            <p className="answered-span">{answeredQuestionsCount}</p>
+            <p>Answered Questions</p>
+          </div>
           <p className="unanswered">
-            <span className="unanswered-span">
+            <p className="unanswered-span">
               {' '}
               {assessmentQuestion.length - answeredQuestionsCount}
-            </span>{' '}
+            </p>{' '}
             Unanswered Questions
           </p>
         </div>
         <hr className="summary-horizontal-line" />
         <div className="question-submit-btn-card">
           <div>
-            <h1 className="question-number-heading">Questions ({total})</h1>
+            <p className="question-number-heading">Questions ({total})</p>
             <ul className="question-number-card">
               {assessmentQuestion.map((item, index) => (
                 <button
@@ -308,7 +310,11 @@ class Assessment extends Component {
       selectedOption,
       score,
     } = this.state
-
+    let show = true
+    console.log('eiei', currentQuestionIndex)
+    if (currentQuestionIndex === 9) {
+      show = false
+    }
     console.log(isCorrectOptionClicked)
     console.log(selectedOption)
     const currentQuestion =
@@ -395,13 +401,15 @@ class Assessment extends Component {
         )}
         <div className="btn-card">
           <p>{score}</p>
-          <button
-            type="button"
-            className="nxt-button"
-            onClick={this.handleOnClickNextBtn}
-          >
-            Next Question
-          </button>
+          {show && (
+            <button
+              type="button"
+              className="nxt-button"
+              onClick={this.handleOnClickNextBtn}
+            >
+              Next Question
+            </button>
+          )}
         </div>
       </div>
     )
