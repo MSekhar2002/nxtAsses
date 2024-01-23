@@ -93,15 +93,14 @@ class Assessment extends Component {
   onSubmit = () => {
     const {history} = this.props
     const {score, timer} = this.state
+    console.log(timer)
 
     const minutes = Math.floor(timer / 60)
     const hours = Math.floor(timer / 3600)
     const seconds = timer % 60
-    const formattedTimer = `${hours
+    const formattedTimer = `${hours.toString().padStart(2, '0')}:${(9 - minutes)
       .toString()
-      .padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+      .padStart(2, '0')}:${(60 - seconds).toString().padStart(2, '0')}`
 
     history.replace('/results', {score, formattedTimer})
     clearInterval(this.timer)
@@ -190,9 +189,9 @@ class Assessment extends Component {
       isClickedQuestionNumber: true,
     })
     // if (isCorrectOptionClicked) {
-    //   this.setState((prevState) => ({
+    //   this.setState(prevState => ({
     //     score: prevState.score + 1,
-    //   }));
+    //   }))
     // }
   }
 
@@ -209,17 +208,17 @@ class Assessment extends Component {
     const selectedOptionData = currentQuestion.options.find(
       item => item.optionId === id,
     )
-    // if (isCorrectOptionClicked || isAnyOptionClicked) {
-    //   this.setState(prevState => ({
-    //     answeredQuestionsCount: prevState.answeredQuestionsCount + 1,
-    //     isCorrectOptionClicked: false,
-    //     isAnyOptionClicked: false,
-    //   }))
-    // }
+    if (isCorrectOptionClicked || isAnyOptionClicked) {
+      this.setState(prevState => ({
+        answeredQuestionsCount: prevState.answeredQuestionsCount + 1,
+        isCorrectOptionClicked: false,
+        isAnyOptionClicked: false,
+      }))
+    }
 
     if (!isCorrectOptionClicked && selectedOptionData.isCorrect === 'true') {
       this.setState(prevState => ({
-        //   score: prevState.score + 1,
+        score: prevState.score + 1,
         isCorrectOptionClicked: true,
       }))
     } else {
@@ -332,18 +331,22 @@ class Assessment extends Component {
         <hr className="horizontal-line" />
         {optionsType === 'DEFAULT' && (
           <div className="option-container">
-            {options.map(option => (
-              <button
-                type="button"
-                className={
-                  selectedOption === option.optionId ? 'selected' : 'normal'
-                }
-                onClick={() => this.onClickAnswer(option.optionId)}
-                key={option.optionId}
-              >
-                {option.text}
-              </button>
-            ))}
+            <ol>
+              {options.map(option => (
+                <li>
+                  <button
+                    type="button"
+                    className={
+                      selectedOption === option.optionId ? 'selected' : 'normal'
+                    }
+                    onClick={() => this.onClickAnswer(option.optionId)}
+                    key={option.optionId}
+                  >
+                    {option.text}
+                  </button>
+                </li>
+              ))}
+            </ol>
           </div>
         )}
         {optionsType === 'IMAGE' && (

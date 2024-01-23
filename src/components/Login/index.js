@@ -112,7 +112,7 @@ class Login extends Component {
           <img
             src="https://res.cloudinary.com/dzaz9bsnw/image/upload/v1704821765/Group_8005_vgjmvh.jpg"
             className="login-website-logo"
-            alt="website logo"
+            alt="login website logo"
           />
           <div className="input-container">{this.renderUsernameField()}</div>
           <div className="input-container">{this.renderPasswordField()}</div>
