@@ -265,14 +265,14 @@ class Assessment extends Component {
         <div className="answered-unanswered-card">
           <div className="answered">
             <p className="answered-span">{answeredQuestionsCount}</p>
-            <p>Answered Questions</p>
+            <p className="answered">Answered Questions</p>
           </div>
           <p className="unanswered">
             <p className="unanswered-span">
               {' '}
               {assessmentQuestion.length - answeredQuestionsCount}
             </p>{' '}
-            Unanswered Questions
+            <p className="unanswered">Unanswered Questions</p>
           </p>
         </div>
         <hr className="summary-horizontal-line" />
@@ -367,7 +367,7 @@ class Assessment extends Component {
                 onClick={() => this.onClickAnswer(option.optionId)}
                 key={option.optionId}
                 src={option.imageUrl}
-                alt={text}
+                alt={option.text}
               />
             ))}
           </div>
